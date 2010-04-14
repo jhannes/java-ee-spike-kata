@@ -1,0 +1,11 @@
+<web-app>
+	<servlet>
+		<servlet-name>personServlet</servlet-name>
+		<servlet-class>com.brodwall.kata.javaee.PersonServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>personServlet</servlet-name>
+		<url-pattern>person/*</url-pattern>
+	</servlet-mapping>
+</web-app>
