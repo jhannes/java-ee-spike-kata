@@ -33,7 +33,7 @@ public class PersonWebTest {
 
 		browser.get(baseUrl);
 		browser.findElement(By.linkText("Create new person")).click();
-		browser.findElement(By.name("full_name")).sendKeys("Johannes Brodwall");
+		browser.findElement(By.name("the_name")).sendKeys("Johannes Brodwall");
 		browser.findElement(By.name("create")).click();
 
 		browser.get(baseUrl);
