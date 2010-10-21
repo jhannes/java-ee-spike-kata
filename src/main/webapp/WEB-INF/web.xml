@@ -1,0 +1,10 @@
+<webapp>
+    <servlet>  
+        <servlet-name>personServlet</servlet-name>
+        <servlet-class>no.steria.kata.javaee.PersonServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>personServlet</servlet-name>
+        <url-pattern>person/*</url-pattern>
+    </servlet-mapping>
+</webapp>
