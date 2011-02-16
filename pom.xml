@@ -211,6 +211,11 @@
               <artifactId>slf4j-log4j12</artifactId>
               <version>1.4.2</version>
             </artifactItem>
+            <artifactItem>
+              <groupId>log4j</groupId>
+              <artifactId>log4j</artifactId>
+              <version>1.2.13</version>
+            </artifactItem>
           </artifactItems>
           <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
         </configuration>
