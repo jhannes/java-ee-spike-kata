@@ -1,5 +1,7 @@
 package no.steria.kata.javaee;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -70,6 +72,10 @@ public class Person {
     public String getDescription() {
         if (birthDate != null) return getName() + " (born " + getBirthDate().toString("dd.MM.yyyy") + ")";
         return getName();
+    }
+
+    public int getAge() {
+        return -1;
     }
 
 }
