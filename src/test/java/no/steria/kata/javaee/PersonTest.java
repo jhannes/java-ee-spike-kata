@@ -2,6 +2,8 @@ package no.steria.kata.javaee;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.joda.time.DateMidnight;
+import org.joda.time.DateTimeUtils;
 import org.junit.Test;
 
 public class PersonTest {
@@ -35,6 +37,19 @@ public class PersonTest {
             .isEqualTo(Person.withName("Darth", "Vader").hashCode()) //
             .isNotEqualTo(Person.withName("Anakin", "Skywalker").hashCode()) //
             .isNotEqualTo(Person.withName(null, null).hashCode());
+    }
+
+    @Test
+    public void shouldGetAge() throws Exception {
+        Person person = Person.withName("Johannes", "Brodwall");
+        person.setBirthDate(new DateMidnight(1975, 12, 21));
+        setNow(new DateMidnight(2011, 2, 17));
+
+        assertThat(person.getAge()).isEqualTo(35);
+    }
+
+    private void setNow(DateMidnight dateMidnight) {
+        DateTimeUtils.setCurrentMillisFixed(dateMidnight.getMillis());
     }
 
 }
