@@ -8,31 +8,31 @@ public class PersonTest {
 
     @Test
     public void shouldGetName() throws Exception {
-        assertThat(Person.withName("Darth").getFullName()).isEqualTo("Darth");
+        assertThat(Person.withName("Darth", "Vader").getFullName()).isEqualTo("Darth Vader");
     }
 
     @Test
     public void shouldBeEqualWhenNameIsEqual() throws Exception {
-        assertThat(Person.withName("Darth")) //
-            .isEqualTo(Person.withName("Darth")) //
-            .isNotEqualTo(Person.withName("Anakin")) //
-            .isNotEqualTo(Person.withName(null)) //
+        assertThat(Person.withName("Darth", "Vader")) //
+            .isEqualTo(Person.withName("Darth", "Vader")) //
+            .isNotEqualTo(Person.withName("Anakin", "Vader")) //
+            .isNotEqualTo(Person.withName(null, null)) //
             .isNotEqualTo(new Object()) //
             .isNotEqualTo(null) //
         ;
 
-        assertThat(Person.withName(null)) //
-            .isEqualTo(Person.withName(null))
-            .isNotEqualTo(Person.withName("Darth")) //
+        assertThat(Person.withName(null, null)) //
+            .isEqualTo(Person.withName(null, null))
+            .isNotEqualTo(Person.withName("Darth", null)) //
         ;
     }
 
     @Test
     public void shouldBaseHashcodeOnName() throws Exception {
-        assertThat(Person.withName("Darth").hashCode()).as("hashCode") //
-            .isEqualTo(Person.withName("Darth").hashCode()) //
-            .isNotEqualTo(Person.withName("Anakin").hashCode()) //
-            .isNotEqualTo(Person.withName(null).hashCode())
+        assertThat(Person.withName("Darth", "Vader").hashCode()).as("hashCode") //
+            .isEqualTo(Person.withName("Darth", "Vader").hashCode()) //
+            .isNotEqualTo(Person.withName("Anakin", "Vader").hashCode()) //
+            .isNotEqualTo(Person.withName(null, null).hashCode())
             ;
     }
 
