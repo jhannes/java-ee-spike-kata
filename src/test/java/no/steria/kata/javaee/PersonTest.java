@@ -8,7 +8,7 @@ public class PersonTest {
 
     @Test
     public void shouldGetName() throws Exception {
-        assertThat(Person.withName("Darth").getName()).isEqualTo("Darth");
+        assertThat(Person.withName("Darth").getFullName()).isEqualTo("Darth");
     }
 
     @Test

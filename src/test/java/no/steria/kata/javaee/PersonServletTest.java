@@ -4,7 +4,6 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -16,15 +15,16 @@ import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
+import org.fest.assertions.StringAssert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InOrder;
 
 public class PersonServletTest {
 
@@ -52,38 +52,32 @@ public class PersonServletTest {
         when(req.getParameter("full_name")).thenReturn("Darth");
         servlet.service(req, resp);
 
-        InOrder order = inOrder(personDao);
-        order.verify(personDao).beginTransaction();
-        order.verify(personDao).createPerson(Person.withName("Darth"));
-        order.verify(personDao).endTransaction(true);
+        verify(personDao).createPerson(Person.withName("Darth"));
+    }
+
+    @Test
+    public void shouldRejectFullNameWithHtmlCharacters() throws Exception {
+        when(req.getParameter("full_name")).thenReturn("<&>");
+        assertValidationError("Full name contains illegal characters")
+            .contains("name='full_name' value='&lt;&amp;&gt;'");
     }
 
     @Test
     public void shouldValidateNameIsGiven() throws Exception {
-        when(req.getMethod()).thenReturn("POST");
         when(req.getParameter("full_name")).thenReturn("");
-
-        servlet.service(req, resp);
-        verify(personDao, never()).createPerson(any(Person.class));
-
-        assertThat(htmlSource.toString()) //
-            .contains("<form ") //
-            .contains("<div id='error'>Name must be given</div>")
-            ;
+        assertValidationError("Full name must be given")
+            .contains("name='full_name' value=''");    
     }
 
-    @Test
-    public void shouldValidateNameCannotContainHtmlCharacters() throws Exception {
+    private StringAssert assertValidationError(String expectedError) throws ServletException, IOException {
         when(req.getMethod()).thenReturn("POST");
-        when(req.getParameter("full_name")).thenReturn("<&>");
 
         servlet.service(req, resp);
         verify(personDao, never()).createPerson(any(Person.class));
 
-        assertThat(htmlSource.toString()) //
+        return assertThat(htmlSource.toString()) //
             .contains("<form ") //
-            .contains("name='full_name' value='&lt;&amp;&gt;'") //
-            .contains("<div id='error'>Name contains illegal characters</div>")
+            .contains("<div id='error'>" + expectedError + "</div>")
             ;
     }
 

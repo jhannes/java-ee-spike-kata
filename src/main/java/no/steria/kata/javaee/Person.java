@@ -11,27 +11,27 @@ public class Person {
     @Id @GeneratedValue
     private Long id;
 
-    private String name;
+    private String fullName;
 
     public static Person withName(String name) {
         Person person = new Person();
-        person.name = name;
+        person.fullName = name;
         return person;
     }
 
-    public String getName() {
-        return name;
+    public String getFullName() {
+        return fullName;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Person)) return false;
-        return nullSafeEquals(name, ((Person)obj).name);
+        return nullSafeEquals(fullName, ((Person)obj).fullName);
     }
 
     @Override
     public int hashCode() {
-        return getName() != null ? getName().hashCode() : -1;
+        return getFullName() != null ? getFullName().hashCode() : -1;
     }
 
     private boolean nullSafeEquals(String a, String b) {
@@ -40,7 +40,7 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person<" + getName() + ">";
+        return "Person<" + getFullName() + ">";
     }
 
 }

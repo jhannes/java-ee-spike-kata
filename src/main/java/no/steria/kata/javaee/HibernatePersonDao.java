@@ -47,7 +47,7 @@ public class HibernatePersonDao implements PersonDao {
     public List<Person> findPeople(String nameQuery) {
         Criteria criteria = getSession().createCriteria(Person.class);
         if (nameQuery != null) {
-            criteria.add(Restrictions.ilike("name", nameQuery, MatchMode.ANYWHERE));
+            criteria.add(Restrictions.ilike("fullName", nameQuery, MatchMode.ANYWHERE));
         }
         return criteria.list();
     }

@@ -42,23 +42,23 @@ public class PersonServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String fullName = req.getParameter("full_name");
-        String errorMessage = validateName(fullName);
+        String fullNameError = validateName(fullName);
 
-        if (errorMessage == null) {
+        if (fullNameError == null) {
             personDao.createPerson(Person.withName(fullName));
             resp.sendRedirect("/");
         } else {
             resp.setContentType("text/html");
-            showCreatePage(resp.getWriter(), fullName, errorMessage);
+            showCreatePage(resp.getWriter(), fullName, fullNameError);
         }
     }
 
     private String validateName(String fullName) {
         String errorMessage = null;
         if (fullName.equals("")) {
-            errorMessage = "Name must be given";
+            errorMessage = "Full name must be given";
         } else if (containsIllegalCharacters(fullName)) {
-            errorMessage = "Name contains illegal characters";
+            errorMessage = "Full name contains illegal characters";
         }
         return errorMessage;
     }
@@ -93,7 +93,7 @@ public class PersonServlet extends HttpServlet {
 
         writer.append("<ul>");
         for (Person person : people) {
-            writer.append("<li>").append(person.getName()).append("</li>");
+            writer.append("<li>").append(person.getFullName()).append("</li>");
         }
         writer //
             .append("</ul>") //
