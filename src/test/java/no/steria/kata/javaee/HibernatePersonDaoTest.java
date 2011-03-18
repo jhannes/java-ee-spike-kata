@@ -25,12 +25,16 @@ public class HibernatePersonDaoTest {
     @Test
     public void shouldLimitFindToQuery() throws Exception {
         personDao.beginTransaction();
-        Person matchingPerson = Person.withName("Darth Vader", null);
-        Person nonMatchingPerson = Person.withName("Anakin", null);
-        personDao.createPerson(matchingPerson); personDao.createPerson(nonMatchingPerson);
+        Person matchingLastname = Person.withName("Darth", "Vader");
+        Person matchingFirstname = Person.withName("Vader", "Darth");
+        Person nonMatchingPerson = Person.withName("Anakin", "Skywalker");
+        personDao.createPerson(matchingLastname); 
+        personDao.createPerson(nonMatchingPerson);
+        personDao.createPerson(matchingFirstname);
 
         assertThat(personDao.findPeople("vader")) //
-            .contains(matchingPerson) //
+            .contains(matchingLastname) //
+            .contains(matchingFirstname) //
             .excludes(nonMatchingPerson);
     }
 
