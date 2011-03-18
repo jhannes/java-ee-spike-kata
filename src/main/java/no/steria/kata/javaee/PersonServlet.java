@@ -77,7 +77,7 @@ public class PersonServlet extends HttpServlet {
             .append("<input type='text' name='full_name' value='" + htmlEscape(fullName) + "'/>") //
             .append("</p>")
             .append("<input type='submit' name='createPerson' value='Create person'/>") //
-            .append("</form>");
+            .append("</form>"); 
         writer.append("</html>");
     }
 
