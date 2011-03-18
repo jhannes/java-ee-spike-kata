@@ -72,7 +72,10 @@ public class PersonServlet extends HttpServlet {
         }
         writer //
             .append("<form method='post' action='createPerson.html'>") //
+            .append("<p>")
+            .append("<label for='full_name'><b>Full name:</b></label>")
             .append("<input type='text' name='full_name' value='" + htmlEscape(fullName) + "'/>") //
+            .append("</p>")
             .append("<input type='submit' name='createPerson' value='Create person'/>") //
             .append("</form>");
         writer.append("</html>");
