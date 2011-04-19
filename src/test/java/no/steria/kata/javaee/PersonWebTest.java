@@ -2,6 +2,8 @@ package no.steria.kata.javaee;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import javax.naming.NamingException;
+
 import org.hibernate.cfg.Environment;
 import org.hsqldb.jdbc.jdbcDataSource;
 import org.junit.Test;
@@ -18,20 +20,8 @@ public class PersonWebTest {
 
     @Test
     public void shouldFindSavedPerson() throws Exception {
-        String jndiDataSource = "jdbc/personDs";
-
-        jdbcDataSource dataSource = new jdbcDataSource();
-        dataSource.setDatabase("jdbc:hsqldb:mem:webtest");
-        dataSource.setUser("sa");
-        new EnvEntry(jndiDataSource, dataSource);
-
-        System.setProperty(Environment.HBM2DDL_AUTO, "create");
-
-        Server server = new Server(0);
-        server.addHandler(new WebAppContext("src/main/webapp", "/"));
-        server.start();
-
-        int localPort = server.getConnectors()[0].getLocalPort();
+        int localPort = startWebserver();
+        
         String baseUrl = "http://localhost:" + localPort + "/";
 
         WebDriver browser = createWebDriver();
@@ -46,6 +36,24 @@ public class PersonWebTest {
         browser.findElement(By.name("findPeople")).click();
 
         assertThat(browser.getPageSource()).contains("Darth Vader");
+    }
+
+    private int startWebserver() throws NamingException, Exception {
+        String jndiDataSource = "jdbc/personDs";
+
+        jdbcDataSource dataSource = new jdbcDataSource();
+        dataSource.setDatabase("jdbc:hsqldb:mem:webtest");
+        dataSource.setUser("sa");
+        new EnvEntry(jndiDataSource, dataSource);
+
+        System.setProperty(Environment.HBM2DDL_AUTO, "create");
+
+        Server server = new Server(0);
+        server.addHandler(new WebAppContext("src/main/webapp", "/"));
+        server.start();
+
+        int localPort = server.getConnectors()[0].getLocalPort();
+        return localPort;
     }
 
     private HtmlUnitDriver createWebDriver() {
