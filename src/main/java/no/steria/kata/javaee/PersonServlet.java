@@ -63,12 +63,12 @@ public class PersonServlet extends HttpServlet {
         return errorMessage;
     }
 
-    private void showCreatePage(PrintWriter writer, String fullName, String validationError) {
+    private void showCreatePage(PrintWriter writer, String fullName, String fullNameError) {
         writer.append("<html>");
         writer.append("<head><style>#error { color: red; }</style></head>");
 
-        if (validationError != null) {
-            writer.append("<div id='error'>").append(validationError).append("</div>");
+        if (fullNameError != null) {
+            writer.append("<div id='error'>").append(fullNameError).append("</div>");
         }
         writer //
             .append("<form method='post' action='createPerson.html'>") //
