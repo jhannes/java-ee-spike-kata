@@ -48,10 +48,10 @@ public class PersonServletTest {
     @Test
     public void shouldCreatePerson() throws Exception {
         when(req.getMethod()).thenReturn("POST");
-        when(req.getParameter("full_name")).thenReturn("Darth");
+        when(req.getParameter("full_name")).thenReturn("Vader");
         servlet.service(req, resp);
 
-        verify(personDao).createPerson(Person.withName("Darth"));
+        verify(personDao).createPerson(Person.withName("Vader"));
     }
 
     @Test

@@ -17,7 +17,7 @@ public class HibernatePersonDaoTest {
     @Test
     public void shouldFindCreatedPeople() throws Exception {
         personDao.beginTransaction();
-        Person person = Person.withName("Darth");
+        Person person = Person.withName("Vader");
         personDao.createPerson(person);
         assertThat(personDao.findPeople(null)).contains(person);
     }
@@ -38,7 +38,7 @@ public class HibernatePersonDaoTest {
     @Test
     public void shouldCommitOrRollback() throws Exception {
         personDao.beginTransaction();
-        Person commitedPerson = Person.withName("Darth");
+        Person commitedPerson = Person.withName("Vader");
         personDao.createPerson(commitedPerson);
         personDao.endTransaction(true);
 
