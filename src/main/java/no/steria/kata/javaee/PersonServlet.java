@@ -70,13 +70,13 @@ public class PersonServlet extends HttpServlet {
         if (fullNameError != null) {
             writer.append("<div id='error'>").append(fullNameError).append("</div>");
         }
-        writer //
-            .append("<form method='post' action='createPerson.html'>") //
+        writer
+            .append("<form method='post' action='createPerson.html'>")
             .append("<p>")
             .append("<label for='full_name'><b>Full name:</b></label>")
-            .append("<input type='text' name='full_name' value='" + htmlEscape(fullName) + "'/>") //
+            .append("<input type='text' name='full_name' value='" + htmlEscape(fullName) + "'/>")
             .append("</p>")
-            .append("<input type='submit' name='createPerson' value='Create person'/>") //
+            .append("<input type='submit' name='createPerson' value='Create person'/>")
             .append("</form>");
         writer.append("</html>");
     }
@@ -87,21 +87,20 @@ public class PersonServlet extends HttpServlet {
 
     private void showSearchPage(PrintWriter writer, String nameQuery, List<Person> people) {
         if (nameQuery == null) nameQuery = "";
-        writer //
-            .append("<html>") //
-            .append("<form method='get' action='findPeople.html'>") //
-            .append("<input type='text' name='name_query' value='" + nameQuery + "'/>") //
-            .append("<input type='submit' name='findPeople' value='Find people'/>") //
+        writer
+            .append("<html>")
+            .append("<form method='get' action='findPeople.html'>")
+            .append("<input type='text' name='name_query' value='" + nameQuery + "'/>")
+            .append("<input type='submit' name='findPeople' value='Find people'/>")
             .append("</form>");
 
         writer.append("<ul>");
         for (Person person : people) {
             writer.append("<li>").append(person.getFullName()).append("</li>");
         }
-        writer //
-            .append("</ul>") //
-            .append("</html>") //
-            ;
+        writer
+            .append("</ul>")
+            .append("</html>");
     }
 
     private boolean containsIllegalCharacters(String fullName) {

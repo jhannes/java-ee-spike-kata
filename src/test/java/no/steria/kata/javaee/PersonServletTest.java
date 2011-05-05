@@ -39,11 +39,10 @@ public class PersonServletTest {
         getRequest("/createPerson.html");
         servlet.service(req, resp);
 
-        assertThat(htmlSource.toString()) //
-            .contains("<form method='post' action='createPerson.html'") //
-            .contains("<input type='text' name='full_name' value=''") //
-            .contains("<input type='submit' name='createPerson' value='Create person'") //
-        ;
+        assertThat(htmlSource.toString())
+            .contains("<form method='post' action='createPerson.html'")
+            .contains("<input type='text' name='full_name' value=''")
+            .contains("<input type='submit' name='createPerson' value='Create person'");
     }
 
     @Test
@@ -65,7 +64,7 @@ public class PersonServletTest {
     @Test
     public void shouldValidateNameIsGiven() throws Exception {
         when(req.getParameter("full_name")).thenReturn("");
-        assertValidationError("Full name must be given");    
+        assertValidationError("Full name must be given");
     }
 
     private StringAssert assertValidationError(String expectedError) throws ServletException, IOException {
@@ -74,10 +73,9 @@ public class PersonServletTest {
         servlet.service(req, resp);
         verify(personDao, never()).createPerson(any(Person.class));
 
-        return assertThat(htmlSource.toString()) //
-            .contains("<form ") //
-            .contains("<div id='error'>" + expectedError + "</div>")
-            ;
+        return assertThat(htmlSource.toString())
+            .contains("<form ")
+            .contains("<div id='error'>" + expectedError + "</div>");
     }
 
     @Test
@@ -97,17 +95,15 @@ public class PersonServletTest {
         verify(personDao).endTransaction(false);
     }
 
-
     @Test
     public void shouldDisplayFindPage() throws Exception {
         getRequest("/findPeople.html");
         servlet.service(req, resp);
 
-        assertThat(htmlSource.toString()) //
-            .contains("<form method='get' action='findPeople.html'") //
-            .contains("<input type='text' name='name_query' value=''") //
-            .contains("<input type='submit' name='findPeople' value='Find people'") //
-        ;
+        assertThat(htmlSource.toString())
+            .contains("<form method='get' action='findPeople.html'")
+            .contains("<input type='text' name='name_query' value=''")
+            .contains("<input type='submit' name='findPeople' value='Find people'");
     }
 
     @Test
@@ -128,10 +124,9 @@ public class PersonServletTest {
 
         servlet.service(req, resp);
 
-        assertThat(htmlSource.toString()) //
-            .contains("Darth Vader") //
-            .contains("Luke Skywalker") //
-        ;
+        assertThat(htmlSource.toString())
+            .contains("Darth Vader")
+            .contains("Luke Skywalker");
     }
 
     @Test
@@ -141,9 +136,8 @@ public class PersonServletTest {
 
         servlet.service(req, resp);
 
-        assertThat(htmlSource.toString()) //
-            .contains("name='name_query' value='vader'") //
-            ;
+        assertThat(htmlSource.toString())
+            .contains("name='name_query' value='vader'");
     }
 
     private void getRequest(String pathInfo) {

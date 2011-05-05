@@ -30,8 +30,8 @@ public class HibernatePersonDaoTest {
         personDao.createPerson(matchingPerson);
         personDao.createPerson(nonMatchingPerson);
 
-        assertThat(personDao.findPeople("vader")) //
-            .contains(matchingPerson) //
+        assertThat(personDao.findPeople("vader"))
+            .contains(matchingPerson)
             .excludes(nonMatchingPerson);
     }
 
@@ -48,8 +48,8 @@ public class HibernatePersonDaoTest {
         personDao.endTransaction(false);
 
         personDao.beginTransaction();
-        assertThat(personDao.findPeople(null)) //
-            .contains(commitedPerson) //
+        assertThat(personDao.findPeople(null))
+            .contains(commitedPerson)
             .excludes(uncommitedPerson);
     }
 
