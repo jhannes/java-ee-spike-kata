@@ -4,12 +4,12 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import javax.naming.NamingException;
 
+import org.eclipse.jetty.plus.jndi.EnvEntry;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.webapp.WebAppContext;
 import org.hibernate.cfg.Environment;
 import org.hsqldb.jdbc.jdbcDataSource;
 import org.junit.Test;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.plus.naming.EnvEntry;
-import org.mortbay.jetty.webapp.WebAppContext;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -21,7 +21,7 @@ public class PersonWebTest {
     @Test
     public void shouldFindSavedPerson() throws Exception {
         int localPort = startWebserver();
-        
+
         String baseUrl = "http://localhost:" + localPort + "/";
 
         WebDriver browser = createWebDriver();
@@ -49,7 +49,7 @@ public class PersonWebTest {
         System.setProperty(Environment.HBM2DDL_AUTO, "create");
 
         Server server = new Server(0);
-        server.addHandler(new WebAppContext("src/main/webapp", "/"));
+        server.setHandler(new WebAppContext("src/main/webapp", "/"));
         server.start();
 
         int localPort = server.getConnectors()[0].getLocalPort();
