@@ -32,10 +32,11 @@ public class PersonWebTest {
 
         browser.get(baseUrl);
         browser.findElement(By.linkText("Find people")).click();
-        browser.findElement(By.name("name_query")).sendKeys("vader");
-        browser.findElement(By.name("findPeople")).click();
-
         assertThat(browser.getPageSource()).contains("Darth Vader");
+
+        browser.findElement(By.name("name_query")).sendKeys("skywalker");
+        browser.findElement(By.name("findPeople")).click();
+        assertThat(browser.getPageSource()).excludes("Darth Vader");
     }
 
     private int startWebserver() throws NamingException, Exception {
