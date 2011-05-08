@@ -12,7 +12,7 @@ public class WebServer {
         String jndiDataSource = "jdbc/personDs";
 
         jdbcDataSource dataSource = new jdbcDataSource();
-        dataSource.setDatabase("jdbc:hsqldb:file:target/test-db");
+        dataSource.setDatabase("jdbc:hsqldb:mem:test");
         dataSource.setUser("sa");
         new EnvEntry(jndiDataSource, dataSource);
 

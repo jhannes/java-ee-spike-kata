@@ -11,22 +11,26 @@ public class Person {
     @Id @GeneratedValue
     private Long id;
 
-    private String fullName;
+    private String firstName;
 
-    public static Person withName(String name) {
+    private String lastName;
+
+    public static Person withName(String firstName, String lastName) {
         Person person = new Person();
-        person.fullName = name;
+        person.firstName = firstName;
+        person.lastName = lastName;
         return person;
     }
 
     public String getFullName() {
-        return fullName;
+        return firstName + " " + lastName;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Person)) return false;
-        return nullSafeEquals(fullName, ((Person)obj).fullName);
+        return nullSafeEquals(firstName, ((Person)obj).firstName)
+                && nullSafeEquals(lastName, ((Person)obj).lastName);
     }
 
     @Override

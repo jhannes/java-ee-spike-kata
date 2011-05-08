@@ -27,15 +27,18 @@ public class PersonWebTest {
         WebDriver browser = createWebDriver();
         browser.get(baseUrl);
         browser.findElement(By.linkText("Create person")).click();
-        browser.findElement(By.name("full_name")).sendKeys("Darth Vader");
+        browser.findElement(By.name("first_name")).sendKeys("Darth");
+        browser.findElement(By.name("last_name")).sendKeys("Vader");
         browser.findElement(By.name("createPerson")).click();
 
         browser.get(baseUrl);
         browser.findElement(By.linkText("Find people")).click();
-        browser.findElement(By.name("name_query")).sendKeys("vader");
+        assertThat(browser.getPageSource()).contains("Darth Vader");
+
+        browser.findElement(By.name("name_query")).sendKeys("skywalker");
         browser.findElement(By.name("findPeople")).click();
 
-        assertThat(browser.getPageSource()).contains("Darth Vader");
+        assertThat(browser.getPageSource()).excludes("Darth Vader");
     }
 
     private int startWebserver() throws NamingException, Exception {
