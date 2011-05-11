@@ -30,13 +30,20 @@ public class PersonWebTest {
         browser.findElement(By.name("full_name")).sendKeys("Darth Vader");
         browser.findElement(By.name("createPerson")).click();
 
+        browser.findElement(By.linkText("Create person")).click();
+        browser.findElement(By.name("full_name")).sendKeys("Luke Skywalker");
+        browser.findElement(By.name("createPerson")).click();
+
         browser.get(baseUrl);
         browser.findElement(By.linkText("Find people")).click();
-        assertThat(browser.getPageSource()).contains("Darth Vader");
+        assertThat(browser.getPageSource())
+            .contains("Darth Vader");
 
-        browser.findElement(By.name("name_query")).sendKeys("skywalker");
+        browser.findElement(By.name("name_query")).sendKeys("vader");
         browser.findElement(By.name("findPeople")).click();
-        assertThat(browser.getPageSource()).excludes("Darth Vader");
+        assertThat(browser.getPageSource())
+            .excludes("Luke Skywalker")
+            .contains("Darth Vader");
     }
 
     private int startWebserver() throws NamingException, Exception {
@@ -48,6 +55,8 @@ public class PersonWebTest {
         new EnvEntry(jndiDataSource, dataSource);
 
         System.setProperty(Environment.HBM2DDL_AUTO, "create");
+        
+        new HibernatePersonDao(jndiDataSource);
 
         Server server = new Server(0);
         server.setHandler(new WebAppContext("src/main/webapp", "/"));
