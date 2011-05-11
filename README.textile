@@ -1,1 +1,16 @@
-Multiple attempts at creating a minimal Java EE solution using TDD. Each attempt is in a separate branch.
+
+Discussion inspiration from refactoring kata:
+* Discussion: Tests as a safety net
+* Discussion: Limited red
+* Discussion: Expressive test implementation
+* Discussion: Scope of a behavior test (whole scenario or single interactions) (discussion)
+
+Concrete learnings from refactoring kata:
+* Advanced refactoring (convert method to builder class)
+* IDE keyboard use, code creation, refactoring
+* WebDriver, Mockito, FEST-assert
+
+Timing:
+* 8 min introduce a new field
+* 4 min discover and lord of the sith bug
+* 10 refactoring convert method to builder class
