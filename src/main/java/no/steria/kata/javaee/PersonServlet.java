@@ -35,63 +35,24 @@ public class PersonServlet extends HttpServlet {
             List<Person> people = personDao.findPeople(nameQuery);
             showSearchPage(writer, nameQuery, people);
         } else {
-            showCreatePage(writer, "", null);
+            PersonCreateForm form = new PersonCreateForm();
+            form.show(writer);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String fullName = req.getParameter("full_name");
-        String fullNameError = validateName(fullName);
-
-        if (fullNameError == null) {
-            personDao.createPerson(Person.withName(fullName));
+        PersonCreateForm form = new PersonCreateForm();
+        form.setFirstName(req.getParameter("first_name"));
+        form.setLastName(req.getParameter("last_name"));
+        
+        if (form.isValid()) {
+            personDao.createPerson(form.createPerson());
             resp.sendRedirect("/");
         } else {
             resp.setContentType("text/html");
-            showCreatePage(resp.getWriter(), fullName, fullNameError);
+            form.show(resp.getWriter());
         }
-    }
-
-    private String validateName(String name) {
-        String errorMessage = null;
-        if (name == null || name.equals("")) {
-            errorMessage = "Full name must be given";
-        } else if (containsIllegalCharacters(name)) {
-            errorMessage = "Full name contains illegal characters";
-        }
-        return errorMessage;
-    }
-
-    private void showCreatePage(PrintWriter writer, String fullName, String fullNameError) {
-        writer.append("<html>");
-        writer.append("<head><style>#error { color: red; }</style></head>");
-
-        if (fullNameError != null) {
-            writer.append("<div id='error'>").append(fullNameError).append("</div>");
-        }
-        writer
-            .append("<form method='post' action='createPerson.html'>")
-            .append("<p>")
-            .append("<label for='full_name'><b>Full name:</b></label>")
-            .append("<input type='text' name='full_name' value='" + htmlEscape(fullName) + "'/>")
-            .append("</p>")
-            .append("<input type='submit' name='createPerson' value='Create person'/>")
-            .append("</form>");
-        writer.append("</html>");
-    }
-
-    private String htmlEscape(String value) {
-        if (value == null) return null;
-        return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
-    }
-
-    private boolean containsIllegalCharacters(String value) {
-        String illegals = "<>&";
-        for (char illegal : illegals.toCharArray()) {
-            if (value.contains(Character.toString(illegal))) return true;
-        }
-        return false;
     }
 
     private void showSearchPage(PrintWriter writer, String nameQuery, List<Person> people) {

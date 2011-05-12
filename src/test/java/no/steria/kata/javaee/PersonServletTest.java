@@ -41,32 +41,47 @@ public class PersonServletTest {
 
         assertThat(htmlSource.toString())
             .contains("<form method='post' action='createPerson.html'")
-            .contains("<input type='text' name='full_name' value=''")
+            .contains("<input type='text' name='first_name' value=''")
+            .contains("<input type='text' name='last_name' value=''")
             .contains("<input type='submit' name='createPerson' value='Create person'");
     }
 
     @Test
     public void shouldCreatePerson() throws Exception {
         when(req.getMethod()).thenReturn("POST");
-        when(req.getParameter("full_name")).thenReturn("Vader");
+        when(req.getParameter("first_name")).thenReturn("Anakin");
+        when(req.getParameter("last_name")).thenReturn("Vader");
         servlet.service(req, resp);
 
-        verify(personDao).createPerson(Person.withName("Vader"));
+        verify(personDao).createPerson(Person.withName("Anakin", "Vader"));
     }
 
     @Test
-    public void shouldRejectFullNameWithHtmlCharacters() throws Exception {
-        when(req.getParameter("full_name")).thenReturn("<&>");
-        assertValidationError("Full name contains illegal characters")
-            .contains("name='full_name' value='&lt;&amp;&gt;'");
+    public void shouldRejectFirstNameWithHtmlCharacters() throws Exception {
+        when(req.getParameter("first_name")).thenReturn("<&>");
+        assertValidationError("First name contains illegal characters")
+            .contains("name='first_name' value='&lt;&amp;&gt;'");
     }
 
     @Test
-    public void shouldValidateFullNameIsGiven() throws Exception {
-        when(req.getParameter("full_name")).thenReturn("");
-        assertValidationError("Full name must be given");
+    public void shouldValidateFirstNameIsGiven() throws Exception {
+        when(req.getParameter("first_name")).thenReturn("");
+        assertValidationError("First name must be given");
     }
 
+    @Test
+    public void shouldRejectLastNameWithHtmlCharacters() throws Exception {
+        when(req.getParameter("last_name")).thenReturn("<&>");
+        assertValidationError("Last name contains illegal characters")
+        .contains("name='last_name' value='&lt;&amp;&gt;'");
+    }
+    
+    @Test
+    public void shouldValidateLastNameIsGiven() throws Exception {
+        when(req.getParameter("last_name")).thenReturn("");
+        assertValidationError("Last name must be given");
+    }
+    
     private StringAssert assertValidationError(String expectedError) throws ServletException, IOException {
         when(req.getMethod()).thenReturn("POST");
 
@@ -81,7 +96,8 @@ public class PersonServletTest {
     @Test
     public void shouldRollbackOnError() throws Exception {
         when(req.getMethod()).thenReturn("POST");
-        when(req.getParameter("full_name")).thenReturn("Darth");
+        when(req.getParameter("first_name")).thenReturn("Darth");
+        when(req.getParameter("last_name")).thenReturn("Vader");
         RuntimeException thrown = new RuntimeException();
         doThrow(thrown)
             .when(personDao).createPerson(any(Person.class));
@@ -118,7 +134,7 @@ public class PersonServletTest {
 
     @Test
     public void shouldDisplaySearchResult() throws Exception {
-        List<Person> people = Arrays.asList(Person.withName("Darth Vader"), Person.withName("Luke Skywalker"));
+        List<Person> people = Arrays.asList(Person.withName("Darth", "Darth Vader"), Person.withName("Darth", "Luke Skywalker"));
         when(personDao.findPeople(anyString())).thenReturn(people);
         getRequest("/findPeople.html");
 

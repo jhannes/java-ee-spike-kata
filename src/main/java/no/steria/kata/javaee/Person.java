@@ -13,9 +13,9 @@ public class Person {
 
     private String fullName;
 
-    public static Person withName(String fullName) {
+    public static Person withName(String firstName, String lastName) {
         Person person = new Person();
-        person.fullName = fullName;
+        person.fullName = firstName + " " + lastName;
         return person;
     }
 
