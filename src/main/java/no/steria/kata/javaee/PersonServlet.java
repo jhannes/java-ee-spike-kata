@@ -53,11 +53,11 @@ public class PersonServlet extends HttpServlet {
         }
     }
 
-    private String validateName(String fullName) {
+    private String validateName(String name) {
         String errorMessage = null;
-        if (fullName.equals("")) {
+        if (name == null || name.equals("")) {
             errorMessage = "Full name must be given";
-        } else if (containsIllegalCharacters(fullName)) {
+        } else if (containsIllegalCharacters(name)) {
             errorMessage = "Full name contains illegal characters";
         }
         return errorMessage;
@@ -81,8 +81,17 @@ public class PersonServlet extends HttpServlet {
         writer.append("</html>");
     }
 
-    private String htmlEscape(String fullName) {
-        return fullName.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+    private String htmlEscape(String value) {
+        if (value == null) return null;
+        return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+    }
+
+    private boolean containsIllegalCharacters(String value) {
+        String illegals = "<>&";
+        for (char illegal : illegals.toCharArray()) {
+            if (value.contains(Character.toString(illegal))) return true;
+        }
+        return false;
     }
 
     private void showSearchPage(PrintWriter writer, String nameQuery, List<Person> people) {
@@ -101,14 +110,6 @@ public class PersonServlet extends HttpServlet {
         writer
             .append("</ul>")
             .append("</html>");
-    }
-
-    private boolean containsIllegalCharacters(String fullName) {
-        String illegals = "<>&";
-        for (char illegal : illegals.toCharArray()) {
-            if (fullName.contains(Character.toString(illegal))) return true;
-        }
-        return false;
     }
 
     public void setPersonDao(PersonDao personDao) {

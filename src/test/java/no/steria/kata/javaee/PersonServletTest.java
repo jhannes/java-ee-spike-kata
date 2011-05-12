@@ -62,7 +62,7 @@ public class PersonServletTest {
     }
 
     @Test
-    public void shouldValidateNameIsGiven() throws Exception {
+    public void shouldValidateFullNameIsGiven() throws Exception {
         when(req.getParameter("full_name")).thenReturn("");
         assertValidationError("Full name must be given");
     }

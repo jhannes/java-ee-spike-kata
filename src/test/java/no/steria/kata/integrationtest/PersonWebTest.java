@@ -1,4 +1,4 @@
-package no.steria.kata.javaee;
+package no.steria.kata.integrationtest;
 
 import static org.fest.assertions.Assertions.assertThat;
 
