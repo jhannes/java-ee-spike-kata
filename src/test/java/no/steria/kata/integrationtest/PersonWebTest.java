@@ -20,11 +20,17 @@ public class PersonWebTest {
 
     @Test
     public void shouldFindSavedPerson() throws Exception {
-        int localPort = startWebserver();
+        registerDataSource();
+        System.setProperty(Environment.HBM2DDL_AUTO, "create");
 
+        Server server = new Server(0);
+        server.setHandler(new WebAppContext("src/main/webapp", "/"));
+        server.start();
+        int localPort = server.getConnectors()[0].getLocalPort();
         String baseUrl = "http://localhost:" + localPort + "/";
 
         WebDriver browser = createWebDriver();
+//        WebDriver browser = new InternetExplorerDriver();
         browser.get(baseUrl);
         browser.findElement(By.linkText("Create person")).click();
         browser.findElement(By.name("first_name")).sendKeys("Darth");
@@ -40,22 +46,13 @@ public class PersonWebTest {
         assertThat(browser.getPageSource()).excludes("Darth Vader");
     }
 
-    private int startWebserver() throws NamingException, Exception {
+    private void registerDataSource() throws NamingException {
         String jndiDataSource = "jdbc/personDs";
 
         jdbcDataSource dataSource = new jdbcDataSource();
         dataSource.setDatabase("jdbc:hsqldb:mem:webtest");
         dataSource.setUser("sa");
         new EnvEntry(jndiDataSource, dataSource);
-
-        System.setProperty(Environment.HBM2DDL_AUTO, "create");
-
-        Server server = new Server(0);
-        server.setHandler(new WebAppContext("src/main/webapp", "/"));
-        server.start();
-
-        int localPort = server.getConnectors()[0].getLocalPort();
-        return localPort;
     }
 
     private HtmlUnitDriver createWebDriver() {
