@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
   xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>no.steria.kata.javaee</groupId>
@@ -27,8 +28,13 @@
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <version>1.5.6</version>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.6.2</version>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>0.9.29</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -43,21 +49,15 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-server</artifactId>
-      <version>7.4.0.v20110414</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>org.eclipse.jetty.aggregate</groupId>
       <artifactId>jetty-plus</artifactId>
-      <version>7.4.0.v20110414</version>
+      <version>${jetty.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-jndi</artifactId>
-      <version>7.4.0.v20110414</version>
+      <version>${jetty.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -110,4 +110,8 @@
       <url>https://repository.jboss.org/nexus/content/repositories/public-jboss/</url>
     </repository>
   </repositories>
+
+  <properties>
+    <jetty.version>8.0.1.v20110908</jetty.version>
+  </properties>
 </project>
