@@ -5,7 +5,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.context.ThreadLocalSessionContext;
 import org.hibernate.criterion.MatchMode;
@@ -16,7 +16,7 @@ public class HibernatePersonDao implements PersonDao {
     private SessionFactory sessionFactory;
 
     public HibernatePersonDao(String jndiDataSource) {
-        AnnotationConfiguration cfg = new AnnotationConfiguration();
+        Configuration cfg = new Configuration();
         cfg.setProperty(Environment.DATASOURCE, jndiDataSource);
         cfg.setProperty(Environment.CURRENT_SESSION_CONTEXT_CLASS, ThreadLocalSessionContext.class.getName());
         cfg.addAnnotatedClass(Person.class);
