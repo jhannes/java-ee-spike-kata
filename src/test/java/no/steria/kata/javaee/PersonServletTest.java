@@ -53,7 +53,7 @@ public class PersonServletTest {
         when(req.getParameter("last_name")).thenReturn("Vader");
         servlet.service(req, resp);
 
-        verify(personDao).createPerson(Person.withName("Anakin", "Vader"));
+        verify(personDao).storePerson(Person.withName("Anakin", "Vader"));
     }
 
     @Test
@@ -86,7 +86,7 @@ public class PersonServletTest {
         when(req.getMethod()).thenReturn("POST");
 
         servlet.service(req, resp);
-        verify(personDao, never()).createPerson(any(Person.class));
+        verify(personDao, never()).storePerson(any(Person.class));
 
         return assertThat(htmlSource.toString())
             .contains("<form ")
@@ -100,7 +100,7 @@ public class PersonServletTest {
         when(req.getParameter("last_name")).thenReturn("Vader");
         RuntimeException thrown = new RuntimeException();
         doThrow(thrown)
-            .when(personDao).createPerson(any(Person.class));
+            .when(personDao).storePerson(any(Person.class));
 
         try {
             servlet.service(req, resp);

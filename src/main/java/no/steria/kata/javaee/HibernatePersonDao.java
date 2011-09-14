@@ -29,7 +29,7 @@ public class HibernatePersonDao implements PersonDao {
     }
 
     @Override
-    public void createPerson(Person person) {
+    public void storePerson(Person person) {
         getSession().save(person);
     }
 

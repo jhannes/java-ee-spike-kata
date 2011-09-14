@@ -47,7 +47,7 @@ public class PersonServlet extends HttpServlet {
         form.setLastName(req.getParameter("last_name"));
         
         if (form.isValid()) {
-            personDao.createPerson(form.createPerson());
+            personDao.storePerson(form.createPerson());
             resp.sendRedirect("/");
         } else {
             resp.setContentType("text/html");
