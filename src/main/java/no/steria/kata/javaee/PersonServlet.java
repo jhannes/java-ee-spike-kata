@@ -16,13 +16,9 @@ public class PersonServlet extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        personDao.beginTransaction();
-        boolean commit = false;
-        try {
+        try (Transaction transaction = personDao.beginTransaction()) {
             super.service(req, resp);
-            commit = true;
-        } finally {
-            personDao.endTransaction(commit);
+            transaction.setCommit();
         }
     }
 

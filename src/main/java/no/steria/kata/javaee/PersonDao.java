@@ -8,8 +8,6 @@ public interface PersonDao {
 
     List<Person> findPeople(String nameQuery);
 
-    void beginTransaction();
-
-    void endTransaction(boolean commit);
+    Transaction beginTransaction();
 
 }

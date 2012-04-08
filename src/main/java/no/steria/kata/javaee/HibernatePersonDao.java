@@ -8,10 +8,27 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.context.ThreadLocalSessionContext;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Restrictions;
 
 public class HibernatePersonDao implements PersonDao {
+
+    public class HibernateTransactionResource implements Transaction {
+
+        private boolean commit = false;
+
+        @Override
+        public void setCommit() {
+            this.commit = true;
+        }
+
+        @Override
+        public void close() {
+            if (commit) {
+                getSession().getTransaction().commit();
+            } else {
+                getSession().getTransaction().rollback();
+            }
+        }
+    }
 
     private SessionFactory sessionFactory;
 
@@ -24,8 +41,9 @@ public class HibernatePersonDao implements PersonDao {
     }
 
     @Override
-    public void beginTransaction() {
+    public Transaction beginTransaction() {
         getSession().beginTransaction();
+        return new HibernateTransactionResource();
     }
 
     @Override
@@ -33,22 +51,10 @@ public class HibernatePersonDao implements PersonDao {
         getSession().save(person);
     }
 
-    @Override
-    public void endTransaction(boolean commit) {
-        if (commit) {
-            getSession().getTransaction().commit();
-        } else {
-            getSession().getTransaction().rollback();
-        }
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public List<Person> findPeople(String nameQuery) {
         Criteria criteria = getSession().createCriteria(Person.class);
-        if (nameQuery != null) {
-            criteria.add(Restrictions.ilike("fullName", nameQuery, MatchMode.ANYWHERE));
-        }
         return criteria.list();
     }
 

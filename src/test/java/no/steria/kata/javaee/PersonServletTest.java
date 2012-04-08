@@ -33,6 +33,7 @@ public class PersonServletTest {
     private HttpServletResponse resp = mock(HttpServletResponse.class);
     private StringWriter htmlSource = new StringWriter();
     private PersonDao personDao = mock(PersonDao.class);
+    private Transaction txMock = mock(Transaction.class);
 
     @Test
     public void shouldDisplayCreatePage() throws Exception {
@@ -92,7 +93,14 @@ public class PersonServletTest {
             assertThat(caught).isEqualTo(thrown);
         }
 
-        verify(personDao).endTransaction(false);
+        verify(txMock, never()).setCommit();
+    }
+
+    @Test
+    public void shouldCommitWhenOk() throws Exception {
+        getRequest("/createPerson.html");
+        servlet.service(req, resp);
+        verify(txMock).setCommit();
     }
 
     @Test
@@ -149,6 +157,7 @@ public class PersonServletTest {
     public void setupServlet() throws IOException {
         when(resp.getWriter()).thenReturn(new PrintWriter(htmlSource));
         servlet.setPersonDao(personDao);
+        when(personDao.beginTransaction()).thenReturn(txMock);
     }
 
     @After

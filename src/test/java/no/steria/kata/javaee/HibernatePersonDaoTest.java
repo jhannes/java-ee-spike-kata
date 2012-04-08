@@ -16,41 +16,36 @@ public class HibernatePersonDaoTest {
 
     @Test
     public void shouldFindCreatedPeople() throws Exception {
-        personDao.beginTransaction();
-        Person person = Person.withName("Vader");
-        personDao.createPerson(person);
-        assertThat(personDao.findPeople(null)).contains(person);
+        try (Transaction transaction = personDao.beginTransaction()) {
+            Person person = Person.withName("Vader");
+            personDao.createPerson(person);
+            assertThat(personDao.findPeople(null)).contains(person);
+        }
     }
 
     @Test
     public void shouldLimitFindToQuery() throws Exception {
-        personDao.beginTransaction();
-        Person matchingPerson = Person.withName("Darth Vader");
-        Person nonMatchingPerson = Person.withName("Anakin");
-        personDao.createPerson(matchingPerson);
-        personDao.createPerson(nonMatchingPerson);
-
-        assertThat(personDao.findPeople("vader"))
-            .contains(matchingPerson)
-            .excludes(nonMatchingPerson);
     }
 
     @Test
     public void shouldCommitOrRollback() throws Exception {
-        personDao.beginTransaction();
         Person commitedPerson = Person.withName("Vader");
-        personDao.createPerson(commitedPerson);
-        personDao.endTransaction(true);
-
-        personDao.beginTransaction();
         Person uncommitedPerson = Person.withName("Jar Jar Binks");
-        personDao.createPerson(uncommitedPerson);
-        personDao.endTransaction(false);
 
-        personDao.beginTransaction();
-        assertThat(personDao.findPeople(null))
-            .contains(commitedPerson)
-            .excludes(uncommitedPerson);
+        try (Transaction transaction = personDao.beginTransaction()) {
+            personDao.createPerson(commitedPerson);
+            transaction.setCommit();
+        }
+
+        try (Transaction transaction = personDao.beginTransaction()) {
+            personDao.createPerson(uncommitedPerson);
+        }
+
+        try (Transaction transaction = personDao.beginTransaction()) {
+            assertThat(personDao.findPeople(null))
+                .contains(commitedPerson)
+                .excludes(uncommitedPerson);
+        }
     }
 
     @Before
